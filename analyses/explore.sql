@@ -1,0 +1,1 @@
+ELECT * FROM {{ ref('obt') }}
