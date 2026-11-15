@@ -6,7 +6,8 @@
 
 WITH hosts AS 
 (
-    SELECT 
+    -- obt has one row per booking; DISTINCT gives one row per key for the snapshot
+    SELECT DISTINCT
         HOST_ID,
         HOST_NAME,
         HOST_SINCE,

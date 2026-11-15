@@ -6,7 +6,8 @@
 
 WITH listings AS 
 (
-    SELECT 
+    -- obt has one row per booking; DISTINCT gives one row per key for the snapshot
+    SELECT DISTINCT
         LISTING_ID,
         PROPERTY_TYPE,
         ROOM_TYPE,

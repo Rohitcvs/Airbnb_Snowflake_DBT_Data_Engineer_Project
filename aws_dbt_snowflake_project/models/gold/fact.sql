@@ -1,20 +1,20 @@
 {% set congigs = [
     {
-        "table" : "AIRBNB.GOLD.OBT",
+        "table" : ref('obt'),
         "columns" : "GOLD_obt.BOOKING_ID, GOLD_obt.LISTING_ID, GOLD_obt.HOST_ID,GOLD_obt.TOTAL_AMOUNT, GOLD_obt.SERVICE_FEE, GOLD_obt.CLEANING_FEE, GOLD_obt.ACCOMMODATES, GOLD_obt.BEDROOMS, GOLD_obt.BATHROOMS, GOLD_obt.PRICE_PER_NIGHT, GOLD_obt.RESPONSE_RATE",
         "alias" : "GOLD_obt"
     },
     { 
-        "table" : "AIRBNB.GOLD.DIM_LISTINGS",
+        "table" : ref('dim_listings'),
         "columns" : "",
         "alias" : "DIM_listings",
-        "join_condition" : "GOLD_obt.listing_id = DIM_listings.listing_id"
+        "join_condition" : "GOLD_obt.listing_id = DIM_listings.listing_id AND DIM_listings.dbt_valid_to = to_date('9999-12-31')"
     },
     {
-        "table" : "AIRBNB.GOLD.DIM_HOSTS",
+        "table" : ref('dim_hosts'),
         "columns" : "",
         "alias" : "DIM_hosts",
-        "join_condition" : "GOLD_obt.host_id = DIM_hosts.host_id"
+        "join_condition" : "GOLD_obt.host_id = DIM_hosts.host_id AND DIM_hosts.dbt_valid_to = to_date('9999-12-31')"
     }
 ] %}
 

@@ -1,8 +1,10 @@
-{{ config(materialized='incremental') }}
+{{ config(materialized='incremental', unique_key='BOOKING_ID') }}
 
 
 SELECT * FROM  {{ source('staging', 'bookings') }}
 
 {% if is_incremental() %}
-    WHERE CREATED_AT > (SELECT COALESCE(MAX(CREATED_AT), '1900-01-01') FROM {{ this }})
+    -- Re-read a 3-day lookback window instead of only rows newer than the max,
+    -- so late-arriving rows aren't skipped; unique_key merges the overlap, so no duplicates.
+    WHERE CREATED_AT > (SELECT DATEADD(day, -3, COALESCE(MAX(CREATED_AT), '1900-01-01'::TIMESTAMP)) FROM {{ this }})
 {% endif %}
