@@ -5,6 +5,8 @@ snapshots:
         schema: gold
         database: AIRBNB
         unique_key: BOOKING_ID
-        strategy: timestamp
-        updated_at: CREATED_AT
+        # 'check' compares these columns between runs. The old 'timestamp' strategy keyed
+        # on a created-at column that never changes, so updates were never captured.
+        strategy: check
+        check_cols: [BOOKING_DATE, BOOKING_STATUS]
         dbt_valid_to_current: "to_date('9999-12-31')"
