@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: silver_bookings
+    description: Cleaned bookings, one row per booking.
+    columns:
+      - name: BOOKING_ID
+        data_tests: [unique, not_null]
+      - name: LISTING_ID
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('silver_listings')
+                field: LISTING_ID
+
+  - name: silver_listings
+    description: Cleaned listings with a price-per-night tag.
+    columns:
+      - name: LISTING_ID
+        data_tests: [unique, not_null]
+      - name: HOST_ID
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('silver_hosts')
+                field: HOST_ID
+
+  - name: silver_hosts
+    description: Cleaned hosts with a response-rate quality bucket.
+    columns:
+      - name: HOST_ID
+        data_tests: [unique, not_null]
