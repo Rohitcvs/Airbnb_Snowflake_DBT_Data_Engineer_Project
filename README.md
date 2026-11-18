@@ -35,7 +35,7 @@ The whole thing is laid out as a medallion architecture, so each layer has a cle
 
 **Gold** is what analysts actually query. `obt` is a denormalized "one big table" that joins bookings, listings, and hosts together, and `fact` is the fact table for dimensional modeling. There are also a few ephemeral models that exist only as intermediate steps and never get written to the warehouse.
 
-On top of those, the snapshots track history. `dim_bookings`, `dim_hosts`, and `dim_listings` are SCD Type 2, so when a record changes, the old version is preserved with valid-from/valid-to dates instead of being overwritten. That makes point-in-time analysis possible.
+On top of those, the snapshots track history. `dim_bookings`, `dim_hosts`, and `dim_listings` are SCD Type 2, so when a record changes, the old version is preserved with valid-from/valid-to dates instead of being overwritten. That makes point-in-time analysis possible. The snapshots use dbt's `check` strategy, which compares column values between runs, because the sources only carry a `created_at` (never an `updated_at`), so a timestamp-based strategy couldn't detect changes. The host and listing inputs are de-duplicated first, since the one big table has one row per booking.
 
 ## How the repo is laid out
 
